@@ -23,22 +23,40 @@
 
 
 <body onload="init()">
-	<header>
-		<div class=margin></div>
 
-		<div class="btn unselectable" id="btn_runstop" onclick="btn_runstop()">Run</div>
-		<div class="btn unselectable" onclick="saveFileName()">Save</div>
-		<!--<a class="btn unselectable" href="#load_popup" onclick="google_an_toolbar('Load')">Load</a>-->
-	</header>
+    <header>
+        <h1 class="name">ΓΛΩΣΣΑ IDE</h1>
+        <div class="margin"></div>
+        <div class="btn unselectable" id="btn_runstop" onclick="btn_runstop()" title="Εκτέλεση/Διακοπή προγράμματος">
+            <span>Run</span>
+        </div>
+        <div class="btn unselectable" onclick="saveFileName()" title="Αποθήκευση αρχείου">
+            <span>Save</span>
+        </div>
+        <!-- Uncomment when load functionality is ready -->
+        <!-- <div class="btn unselectable" onclick="loadFile()" title="Φόρτωση αρχείου">
+            <span>Load</span>
+        </div> -->
+    </header>
 
-  <div id="userlist"></div>
-  <textarea id=code_area></textarea>
+    <main>
+        <div id="userlist" role="complementary" aria-label="Συνδεδεμένοι χρήστες"></div>
+        <textarea id="code_area" aria-label="Περιοχή κώδικα"></textarea>
 
-	<div class="screen_container">
-	<div id=screen></div>
+        <div class="screen_container" role="main" aria-label="Κονσόλα εκτέλεσης">
+            <div id="screen" aria-live="polite" aria-label="Αποτελέσματα εκτέλεσης"></div>
+            <input
+                    type="text"
+                    id="keyboard"
+                    onkeydown="keyboard_down(event)"
+                    placeholder="Πληκτρολογήστε εντολή..."
+                    aria-label="Είσοδος εντολών"
+                    autocomplete="off"
+                    spellcheck="false"
+            >
+        </div>
+    </main>
 
-	<input type=text id="keyboard" onkeydown='keyboard_down(event)' placeholder="Είσοδος"></input>
-	</div>
 
 	<!-- Save Popup -->
 
