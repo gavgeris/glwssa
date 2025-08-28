@@ -177,76 +177,6 @@ h4{
 	
 }
 
-#userlist {
-    display: block;
-	float: right;
-	height: 200px;
-	width: calc(15vh);
-    }
-.firepad-userlist-users {
-	position: relative !important;
-}
-.codemirror-lines{
-	/*font-family: 'Roboto', sans-serif, monospace;*/
-	font-size: 18px;
-	line-height: 27px;
-}
-
-.screen_container {
-	display: inline-block;
-	/*float: left;*/
-	background-color: var(--col-head);
-	/*width: calc(100% - 502px - 3 * var(--margin));*/
-	width: calc((100vw - 2px - 3 * var(--margin)) / 3);
-	min-width: 100px;
-	height: calc((100vh - var(--header) - var(--footer) - 2 * var(--margin)));
-
-	box-sizing: border-box;
-
-	margin-top: var(--margin);
-	margin-left: var(--margin);
-	margin-bottom: var(--margin);
-	border: 1px solid white;
-
-	/*resize: both;
-	overflow: hidden;*/
-
-
-	position: relative;
-}
-
-@media only screen and (max-width: 950px) {
-  .screen_container {
-    width: calc(100vw - 2 * var(--margin));
-	height: calc((100vh - 3 * var(--margin) - var(--header) - var(--footer)) / 2);
-	min-height: 220px;
-  }
-}
-
-#screen{
-	background-color: var(--col-fill);
-	width: 100%;
-	height: calc(100% - 2 * var(--margin) - 1.3em);
-	padding: var(--margin);
-	box-sizing: border-box;
-
-	overflow: auto;
-
-	border-bottom: 1px solid white;
-}
-
-#keyboard{
-	
-	width: calc(100% - 2 * var(--margin));
-
-	background: var(--col-back);
-	color: white;
-	border: 1px solid white;
-	font-size: 1em;
-	margin-top: var(--margin);
-	margin-left: var(--margin);
-}
-
 .in{
 	font-family: 'Roboto', sans-serif;
 	color: #0f0;
@@ -588,3 +518,349 @@ footer li + li::before{
 }
 
 
+
+
+
+/* Main Layout Container */
+.main-layout {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--margin);
+	padding: var(--margin);
+	height: calc(100vh - var(--header) - var(--footer));
+	box-sizing: border-box;
+}
+
+/* Code Editor Section */
+.code-editor-container {
+	flex: 2;
+	min-width: 300px;
+	display: flex;
+	flex-direction: column;
+	background: var(--col-head);
+	border: 1px solid rgba(0, 212, 255, 0.2);
+	border-radius: var(--border-radius-large);
+	box-shadow: var(--shadow-large);
+	overflow: hidden;
+}
+
+.code-editor-header {
+	background: linear-gradient(135deg, var(--col-head) 0%, rgba(0, 212, 255, 0.05) 100%);
+	padding: 0.75rem var(--margin);
+	border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+	font-weight: 600;
+	color: var(--col-accent);
+	font-size: 0.875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+#code_area {
+	flex: 1;
+	border: none;
+	background: var(--col-fill);
+	color: var(--col-light);
+	font-family: 'Fira Code', monospace;
+	font-size: 14px;
+	line-height: 1.6;
+	padding: var(--margin);
+	resize: none;
+	outline: none;
+}
+
+/* Console/Output Section */
+.screen_container {
+	flex: 2;
+	min-width: 300px;
+	display: flex;
+	flex-direction: column;
+	background: var(--col-head);
+	border: 1px solid rgba(0, 212, 255, 0.2);
+	border-radius: var(--border-radius-large);
+	box-shadow: var(--shadow-large);
+	overflow: hidden;
+	transition: var(--transition);
+}
+
+.screen_container:hover {
+	border-color: var(--col-accent);
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.console-header {
+	background: linear-gradient(135deg, var(--col-head) 0%, rgba(0, 212, 255, 0.05) 100%);
+	padding: 0.75rem var(--margin);
+	border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+	font-weight: 600;
+	color: var(--col-accent);
+	font-size: 0.875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+#screen {
+	flex: 1;
+	background: linear-gradient(135deg, var(--col-fill) 0%, #1a2030 100%);
+	padding: var(--margin);
+	overflow: auto;
+	font-family: 'Fira Code', monospace;
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+#keyboard {
+	border: none;
+	border-top: 1px solid rgba(0, 212, 255, 0.2);
+	background: var(--col-back);
+	color: var(--col-light);
+	font-size: 0.95rem;
+	padding: 0.75rem var(--margin);
+	font-family: 'Fira Code', monospace;
+	outline: none;
+	transition: var(--transition);
+}
+
+#keyboard:focus {
+	background: var(--col-fill);
+	box-shadow: inset 0 0 0 2px var(--col-accent);
+}
+
+#keyboard::placeholder {
+	color: rgba(225, 232, 239, 0.5);
+}
+
+/* User List Section */
+.userlist-container {
+	flex: 1;
+	min-width: 250px;
+	max-width: 300px;
+	display: flex;
+	flex-direction: column;
+	background: var(--col-head);
+	border: 1px solid rgba(0, 212, 255, 0.2);
+	border-radius: var(--border-radius-large);
+	box-shadow: var(--shadow-large);
+	overflow: hidden;
+}
+
+.userlist-header {
+	background: linear-gradient(135deg, var(--col-head) 0%, rgba(0, 212, 255, 0.05) 100%);
+	padding: 0.75rem var(--margin);
+	border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+	font-weight: 600;
+	color: var(--col-accent);
+	font-size: 0.875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+#userlist {
+	flex: 1;
+	background: var(--col-fill);
+	overflow: auto;
+	display: block;
+	width: 100%;
+	height: auto;
+	float: none;
+}
+
+/* Firepad User List Styling */
+.firepad-userlist {
+	background: transparent !important;
+	border: none !important;
+	color: var(--col-light) !important;
+	font-family: 'Roboto', sans-serif !important;
+}
+
+.firepad-userlist-heading {
+	background: rgba(0, 212, 255, 0.1) !important;
+	color: var(--col-accent) !important;
+	padding: 0.75rem var(--margin) !important;
+	font-weight: 600 !important;
+	font-size: 0.875rem !important;
+	border-bottom: 1px solid rgba(0, 212, 255, 0.2) !important;
+}
+
+.firepad-userlist-users {
+	position: relative !important;
+	padding: 0.5rem !important;
+}
+
+.firepad-userlist-user {
+	background: rgba(0, 212, 255, 0.05) !important;
+	border: 1px solid rgba(0, 212, 255, 0.1) !important;
+	border-radius: var(--border-radius) !important;
+	margin-bottom: 0.5rem !important;
+	padding: 0.75rem !important;
+	transition: var(--transition) !important;
+}
+
+.firepad-userlist-user:hover {
+	background: rgba(0, 212, 255, 0.1) !important;
+	border-color: var(--col-accent) !important;
+}
+
+.firepad-userlist-name-input,
+.firepad-userlist-name {
+	background: transparent !important;
+	color: var(--col-light) !important;
+	border: none !important;
+	font-family: 'Roboto', sans-serif !important;
+	font-size: 0.875rem !important;
+}
+
+.firepad-userlist-name-input:focus {
+	outline: none !important;
+	box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.3) !important;
+	border-radius: 4px !important;
+}
+
+.firepad-userlist-name-hint {
+	color: rgba(225, 232, 239, 0.5) !important;
+	font-size: 0.75rem !important;
+	margin-top: 0.25rem !important;
+}
+
+.firepad-userlist-color-indicator {
+	border-radius: 50% !important;
+	margin-right: 0.5rem !important;
+	border: 2px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* CodeMirror Styling */
+.CodeMirror {
+	border: none !important;
+	background: var(--col-fill) !important;
+	font-family: 'Fira Code', 'Monaco', 'Menlo', monospace !important;
+	font-size: 14px !important;
+	line-height: 1.6 !important;
+	height: 100% !important;
+}
+
+.CodeMirror-lines {
+	padding: var(--margin) !important;
+}
+
+.CodeMirror-focused .CodeMirror-cursor {
+	border-left: 2px solid var(--col-accent) !important;
+}
+
+.CodeMirror-selected {
+	background: rgba(0, 212, 255, 0.2) !important;
+}
+
+/* Responsive Breakpoints */
+
+/* Large Desktop */
+@media only screen and (min-width: 1400px) {
+	.main-layout {
+		gap: calc(var(--margin) * 1.5);
+	}
+
+	.userlist-container {
+		max-width: 350px;
+	}
+}
+
+/* Desktop */
+@media only screen and (max-width: 1200px) {
+	.code-editor-container,
+	.screen_container {
+		flex: 1;
+		min-width: 280px;
+	}
+
+	.userlist-container {
+		flex: 0 0 100%;
+		max-width: none;
+		min-width: 100%;
+		max-height: 200px;
+	}
+
+	.main-layout {
+		flex-direction: column;
+	}
+}
+
+/* Tablet */
+@media only screen and (max-width: 768px) {
+	.main-layout {
+		flex-direction: column;
+		padding: calc(var(--margin) / 2);
+		gap: calc(var(--margin) / 2);
+	}
+
+	.code-editor-container,
+	.screen_container,
+	.userlist-container {
+		flex: 1;
+		min-width: 100%;
+		max-width: none;
+	}
+
+	.userlist-container {
+		max-height: 150px;
+		order: -1; /* Move user list to top on mobile */
+	}
+
+	.code-editor-container {
+		min-height: 300px;
+	}
+
+	.screen_container {
+		min-height: 250px;
+	}
+}
+
+/* Mobile */
+@media only screen and (max-width: 480px) {
+	.main-layout {
+		height: calc(100vh - var(--header) - var(--footer) - var(--margin));
+		padding: calc(var(--margin) / 2);
+		gap: calc(var(--margin) / 2);
+	}
+
+	.code-editor-header,
+	.console-header,
+	.userlist-header {
+		padding: 0.5rem calc(var(--margin) / 2);
+		font-size: 0.75rem;
+	}
+
+	#screen,
+	#code_area {
+		padding: calc(var(--margin) / 2);
+		font-size: 13px;
+	}
+
+	#keyboard {
+		padding: 0.5rem calc(var(--margin) / 2);
+		font-size: 14px;
+	}
+
+	.userlist-container {
+		max-height: 120px;
+	}
+
+	.firepad-userlist-heading {
+		padding: 0.5rem calc(var(--margin) / 2) !important;
+		font-size: 0.75rem !important;
+	}
+
+	.firepad-userlist-users {
+		padding: 0.25rem !important;
+	}
+
+	.firepad-userlist-user {
+		padding: 0.5rem !important;
+		margin-bottom: 0.25rem !important;
+	}
+}
+
+/* Ultra-wide screens */
+@media only screen and (min-width: 1920px) {
+	.main-layout {
+		max-width: 1800px;
+		margin: 0 auto;
+	}
+}
