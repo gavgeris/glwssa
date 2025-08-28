@@ -105,7 +105,7 @@ if (!$program) {
 
 <script>
 	// Inject program from PHP
-	var initialProgram = <?php echo $program; /*json_encode($program, JSON_UNESCAPED_UNICODE);*/ ?>;
+	var initialProgram = '<?php echo $program; /*json_encode($program, JSON_UNESCAPED_UNICODE);*/ ?>';
 
 	function init() {
 		//// Initialize Firebase
