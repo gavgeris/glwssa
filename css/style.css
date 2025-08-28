@@ -539,5 +539,5 @@ footer li + li::before{
 	.container {
 		flex-direction: column;
 	}
-
+}
 
