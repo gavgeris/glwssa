@@ -169,8 +169,8 @@ h4{
 }
 
 .Codemirror{
-	display: block;
-	float: left;
+	display: flex;
+	/*float: left;*/
 	height: 100px;
 	margin: var(--margin) 0px 0px var(--margin);
 	border: 1px solid white;
@@ -519,10 +519,14 @@ footer li + li::before{
 
 
 #userlist {
-	display: block;
-	float: right;
-	height: 200px;
-	width: calc(15vh);
+	display: flex;
+	/*float: right;*/
+	/*height: 200px;*/
+	/*width: calc(15vh);*/
+	margin-top: var(--margin);
+	margin-left: var(--margin);
+	margin-bottom: var(--margin);
+	align-items: first baseline;
 }
 .firepad-userlist-users {
 	position: relative !important;
@@ -534,7 +538,8 @@ footer li + li::before{
 }
 
 .screen_container {
-	display: inline-block;
+	display: flex;
+	flex-direction: column;
 	/*float: left;*/
 	background-color: var(--col-head);
 	/*width: calc(100% - 502px - 3 * var(--margin));*/

@@ -40,22 +40,23 @@
     </header>
 
     <main>
+		<div style="flex-direction: auto;display: flex;flex-flow: wrap;">
+			<textarea id="code_area" aria-label="Περιοχή κώδικα"></textarea>
 
-        <div id="userlist" role="complementary" aria-label="Συνδεδεμένοι χρήστες"></div>
-        <textarea id="code_area" aria-label="Περιοχή κώδικα"></textarea>
-
-        <div class="screen_container" role="main" aria-label="Κονσόλα εκτέλεσης">
-            <div id="screen" aria-live="polite" aria-label="Αποτελέσματα εκτέλεσης"></div>
-            <input
-                    type="text"
-                    id="keyboard"
-                    onkeydown="keyboard_down(event)"
-                    placeholder="Πληκτρολογήστε εντολή..."
-                    aria-label="Είσοδος εντολών"
-                    autocomplete="off"
-                    spellcheck="false"
-            >
-        </div>
+			<div class="screen_container" role="main" aria-label="Κονσόλα εκτέλεσης">
+				<div id="screen" aria-live="polite" aria-label="Αποτελέσματα εκτέλεσης"></div>
+				<input
+						type="text"
+						id="keyboard"
+						onkeydown="keyboard_down(event)"
+						placeholder="Πληκτρολογήστε εντολή..."
+						aria-label="Είσοδος εντολών"
+						autocomplete="off"
+						spellcheck="false"
+				>
+			</div>
+			<div id="userlist" role="complementary" aria-label="Συνδεδεμένοι χρήστες"></div>
+		</div>
     </main>
 
 
