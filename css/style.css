@@ -518,26 +518,73 @@ footer li + li::before{
 }
 
 
-.container {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 20px; /* spacing between columns */
-	padding: 20px;
+#userlist {
+	display: block;
+	float: right;
+	height: 200px;
+	width: calc(15vh);
+}
+.firepad-userlist-users {
+	position: relative !important;
+}
+.codemirror-lines{
+	/*font-family: 'Roboto', sans-serif, monospace;*/
+	font-size: 18px;
+	line-height: 27px;
 }
 
-.column {
-	flex: 1; /* equal width columns */
-	min-width: 250px; /* ensures columns stack on small screens */
-	background-color: #f2f2f2;
-	padding: 20px;
+.screen_container {
+	display: inline-block;
+	/*float: left;*/
+	background-color: var(--col-head);
+	/*width: calc(100% - 502px - 3 * var(--margin));*/
+	width: calc((100vw - 2px - 3 * var(--margin)) / 3);
+	min-width: 100px;
+	height: calc((100vh - var(--header) - var(--footer) - 2 * var(--margin)));
+
 	box-sizing: border-box;
-	border: 1px solid #ccc;
-	border-radius: 5px;
+
+	margin-top: var(--margin);
+	margin-left: var(--margin);
+	margin-bottom: var(--margin);
+	border: 1px solid white;
+
+	/*resize: both;
+	overflow: hidden;*/
+
+
+	position: relative;
 }
 
-@media (max-width: 768px) {
-	.container {
-		flex-direction: column;
+@media only screen and (max-width: 950px) {
+	.screen_container {
+		width: calc(100vw - 2 * var(--margin));
+		height: calc((100vh - 3 * var(--margin) - var(--header) - var(--footer)) / 2);
+		min-height: 220px;
 	}
+}
+
+#screen{
+	background-color: var(--col-fill);
+	width: 100%;
+	height: calc(100% - 2 * var(--margin) - 1.3em);
+	padding: var(--margin);
+	box-sizing: border-box;
+
+	overflow: auto;
+
+	border-bottom: 1px solid white;
+}
+
+#keyboard{
+
+	width: calc(100% - 2 * var(--margin));
+
+	background: var(--col-back);
+	color: white;
+	border: 1px solid white;
+	font-size: 1em;
+	margin-top: var(--margin);
+	margin-left: var(--margin);
 }
 

@@ -2,7 +2,7 @@
 <head>
 	<title>Συνεργατικός Διερμηνευτής Γλώσσας</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="css/style.css?v1">
+	<link rel="stylesheet" href="css/style.css?v2">
 	<link rel="stylesheet" href="codemirror-5.52.2/lib/codemirror.css">
 	<link rel="stylesheet" href="css/rubyblue_edited.css">
 	<link href="https://fonts.googleapis.com/css?family=Carter+One|Roboto&display=swap" rel="stylesheet">
@@ -41,29 +41,21 @@
 
     <main>
 
-		<div class="container">
-			<div class="column">
-				<textarea id="code_area" aria-label="Περιοχή κώδικα"></textarea>
-			</div>
-			<div class="column">
-				<div class="screen_container" role="main" aria-label="Κονσόλα εκτέλεσης">
-					<div id="screen" aria-live="polite" aria-label="Αποτελέσματα εκτέλεσης"></div>
-					<input
-							type="text"
-							id="keyboard"
-							onkeydown="keyboard_down(event)"
-							placeholder="Πληκτρολογήστε εντολή..."
-							aria-label="Είσοδος εντολών"
-							autocomplete="off"
-							spellcheck="false"
-					>
-				</div>
-			</div>
-			<div class="column">
-				<div id="userlist" role="complementary" aria-label="Συνδεδεμένοι χρήστες"></div>
-			</div>
-		</div>
+        <div id="userlist" role="complementary" aria-label="Συνδεδεμένοι χρήστες"></div>
+        <textarea id="code_area" aria-label="Περιοχή κώδικα"></textarea>
 
+        <div class="screen_container" role="main" aria-label="Κονσόλα εκτέλεσης">
+            <div id="screen" aria-live="polite" aria-label="Αποτελέσματα εκτέλεσης"></div>
+            <input
+                    type="text"
+                    id="keyboard"
+                    onkeydown="keyboard_down(event)"
+                    placeholder="Πληκτρολογήστε εντολή..."
+                    aria-label="Είσοδος εντολών"
+                    autocomplete="off"
+                    spellcheck="false"
+            >
+        </div>
     </main>
 
 
