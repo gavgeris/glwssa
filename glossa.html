@@ -1,0 +1,156 @@
+<html>
+<head>
+	<title>Συνεργατικός Διερμηνευτής Γλώσσας</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="codemirror-5.52.2/lib/codemirror.css">
+	<link rel="stylesheet" href="css/rubyblue_edited.css">
+	<link href="https://fonts.googleapis.com/css?family=Carter+One|Roboto&display=swap" rel="stylesheet">
+	<meta charset="UTF-8">
+
+	<script src="codemirror-5.52.2/lib/codemirror.js"></script>
+	  <!-- Firebase -->
+	  <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
+	  <!-- Firepad -->
+	  <link rel="stylesheet" href="css/firepad/firepad-userlist.css" />  
+	  <script src="js/firepad/firepad-userlist.js"></script>
+	  <script src="js/firepad/firepad.min.js"></script>
+	  <script src="js/sweetalert2@9.js"></script>
+	  <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="rgykifvu9z58v4s"></script>
+
+</head>
+
+
+
+<body onload="init()">
+	<header>
+		<div class=margin></div>
+
+		<div class="btn unselectable" id="btn_runstop" onclick="btn_runstop()">Run</div>
+		<div class="btn unselectable" onclick="saveFileName()">Save</div>
+		<!--<a class="btn unselectable" href="#load_popup" onclick="google_an_toolbar('Load')">Load</a>-->
+	</header>
+
+  <div id="userlist"></div>
+  <textarea id=code_area></textarea>
+
+	<div class="screen_container">
+	<div id=screen></div>
+
+	<input type=text id="keyboard" onkeydown='keyboard_down(event)' placeholder="Είσοδος"></input>
+	</div>
+
+	<!-- Save Popup -->
+
+	<div class="popup" id="save_popup">
+		<div class="popup_window">
+			<div class="popup_header">
+			<h1 class="unselectable">Αποθήκευση</h1>
+			</div>
+
+			<h4 class="unselectable">Όνομα αρχείου:</h4>
+			<input type=text id="save_filename" value="πρόγραμμα"></input>
+
+			<a class="popup_btn unselectable" href="#">Cancel</a>
+			<div class="popup_btn unselectable" onclick="save()">Save</div>
+		</div>
+	</div>
+
+	<!-- Load Popup -->
+	<div class="popup" id="load_popup">
+		<div class="popup_window">
+			<div class="popup_header">
+			<h1 class="unselectable">Φόρτωση</h1>
+			</div>
+
+			<input type=file accept=".txt" id="load_file"></input>
+
+			<a class="popup_btn unselectable" href="#">Cancel</a>
+			<div class="popup_btn unselectable" onclick="load()">Load</div>
+		</div>
+	</div>
+
+</body>
+
+<!-- Filesaver -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+
+<!-- Codemirror Stuff -->
+<script src="codemirror-5.52.2/addon/mode/simple.js"></script>
+<script src="js/glwssa_mode.js" charset="utf-8"></script>
+
+
+<!-- Functional stuff -->
+<script src="./js/file_explorer.js" charset="utf-8"></script>
+<script src="./js/initializer.js" charset="utf-8"></script>
+<!-- <script src="./js/autosave.js" charset="utf-8"></script> -->
+<script src="./js/controller.js" charset="utf-8"></script>
+<script src="./js/screen.js" charset="utf-8"></script>
+<script src="./js/resize.js" charset="utf-8"></script>
+<script>
+    function init() {
+      //// Initialize Firebase.
+      //// TODO: replace with your Firebase project configuration.
+      var config = {
+		  apiKey: "AIzaSyAAMAVAy6d-hAsbiK74rdhDdj2R-FgO524",
+		  authDomain: "firepad-959d7.firebaseapp.com",
+		  databaseURL: "https://firepad-959d7.firebaseio.com",
+		  projectId: "firepad-959d7",
+		  storageBucket: "firepad-959d7.appspot.com",
+		  messagingSenderId: "827774846517",
+		  appId: "1:827774846517:web:cc1d7e2d267c3af613d37c"
+		};
+      firebase.initializeApp(config);
+
+      //// Get Firebase Database reference.
+      var firepadRef = getExampleRef();
+
+	  // Create a random ID to use as our user ID (we must give this to firepad and FirepadUserList).
+      var userId = Math.floor(Math.random() * 9999999999).toString();
+
+      //// Create FirepadUserList (with our desired userId).
+      var firepadUserList = FirepadUserList.fromDiv(firepadRef.child('users'),
+          document.getElementById('userlist'), userId);
+	  
+	  //// Create Firepad.
+      var firepad = Firepad.fromCodeMirror(firepadRef, editor, {
+        defaultText: 'ΠΡΟΓΡΑΜΜΑ ....\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Ι\nΑΡΧΗ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ\n\n', userId: userId
+      });
+    }
+
+    // Helper to get hash from end of URL or generate a random one.
+    function getExampleRef() {
+      var ref = firebase.database().ref();
+      var hash = window.location.hash.replace(/#/g, '');
+      if (hash) {
+        ref = ref.child(hash);
+      } else {
+        ref = ref.push(); // generate unique location.
+        window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
+      }
+      if (typeof console !== 'undefined') {
+        console.log('Firebase data: ', ref.toString());
+      }
+      return ref;
+    }
+	
+	async function saveFileName() {
+		const { value: filename } = await Swal.fire({
+		  title: 'Όνομα Αρχείου',
+		  input: 'text',
+		  inputValue: 'ΠΡΟΓΡΑΜΜΑ',
+		  showCancelButton: true,
+		  inputValidator: (value) => {
+			if (!value) {
+			  return 'You need to write something!'
+			}
+		}
+		})
+		if (filename) {
+			document.getElementById("save_filename").value = filename;
+			save();
+		}
+	}
+  </script>
+
+</html>

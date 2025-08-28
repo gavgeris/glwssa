@@ -1,0 +1,99 @@
+<html>
+<head>
+	<title>Συνεργατικός Διερμηνευτής Γλώσσας</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="codemirror-5.52.2/lib/codemirror.css">
+	<link rel="stylesheet" href="css/rubyblue_edited.css">
+	<link href="https://fonts.googleapis.com/css?family=Carter+One|Roboto&display=swap" rel="stylesheet">
+	<meta charset="UTF-8">
+
+	<script src="codemirror-5.52.2/lib/codemirror.js"></script>
+	  <!-- Firebase -->
+	  <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
+	  <!-- Firepad -->
+	  <link rel="stylesheet" href="https://www.firepad.io/examples/firepad-userlist.css" />  
+	  <script src="https://www.firepad.io/examples/firepad-userlist.js"></script>
+	  <script src="https://firepad.io/releases/v1.5.9/firepad.min.js"></script>
+	  <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="rgykifvu9z58v4s"></script>
+
+<script
+			  src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+			  integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
+			  crossorigin="anonymous"></script>
+		
+</head>
+
+
+<body onload="init()">
+<div class="btn unselectable"><a href="https://sxoleio.org/firepad2/glossa_dropbox.html#gavgeris" class="dropbox-saver"></a></div>
+<textarea id=fillme></textarea>
+<div id="replaceme">
+  <textarea id=code_area></textarea>
+</div>
+</body>
+
+<!-- Codemirror Stuff -->
+<script src="codemirror-5.52.2/addon/mode/simple.js"></script>
+<script src="js/glwssa_mode.js" charset="utf-8"></script>
+
+
+<!-- Functional stuff -->
+<script src="./js/file_explorer.js" charset="utf-8"></script>
+<script src="./js/initializer.js" charset="utf-8"></script>
+<!-- <script src="./js/autosave.js" charset="utf-8"></script> -->
+<script src="./js/controller.js" charset="utf-8"></script>
+<script src="./js/screen.js" charset="utf-8"></script>
+<script src="./js/resize.js" charset="utf-8"></script>
+<script>
+    function init() {
+      //// Initialize Firebase.
+      //// TODO: replace with your Firebase project configuration.
+      var config = {
+		  apiKey: "AIzaSyAAMAVAy6d-hAsbiK74rdhDdj2R-FgO524",
+		  authDomain: "firepad-959d7.firebaseapp.com",
+		  databaseURL: "https://firepad-959d7.firebaseio.com",
+		  projectId: "firepad-959d7",
+		  storageBucket: "firepad-959d7.appspot.com",
+		  messagingSenderId: "827774846517",
+		  appId: "1:827774846517:web:cc1d7e2d267c3af613d37c"
+		};
+      firebase.initializeApp(config);
+
+      //// Get Firebase Database reference.
+      var firepadRef = getExampleRef();
+
+	  // Create a random ID to use as our user ID (we must give this to firepad and FirepadUserList).
+      var userId = Math.floor(Math.random() * 9999999999).toString();
+
+	  //// Create Firepad.
+      var firepad = Firepad.fromCodeMirror(firepadRef, editor, {
+        defaultText: 'ΠΡΟΓΡΑΜΜΑ ....\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Ι\nΑΡΧΗ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ\n\n', userId: userId
+      });
+		firepad.on('ready', function() {
+		// Firepad is ready.
+		$('#fillme').val(editor.getValue());
+		});
+			  
+
+    }
+
+    // Helper to get hash from end of URL or generate a random one.
+    function getExampleRef() {
+      var ref = firebase.database().ref();
+      var hash = window.location.hash.replace(/#/g, '');
+      if (hash) {
+        ref = ref.child(hash);
+      } else {
+        ref = ref.push(); // generate unique location.
+        window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
+      }
+      if (typeof console !== 'undefined') {
+        console.log('Firebase data: ', ref.toString());
+      }
+      return ref;
+    }
+	
+  </script>
+
+</html>
