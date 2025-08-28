@@ -1,277 +1,174 @@
-<!DOCTYPE html>
-<html lang="el">
+<html>
 <head>
-	<meta charset="UTF-8">
 	<title>Συνεργατικός Διερμηνευτής Γλώσσας</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="Συνεργατική πλατφόρμα για την επεξεργασία και εκτέλεση προγραμμάτων στη ΓΛΩΣΣΑ">
-
-	<!-- Stylesheets -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="codemirror-5.52.2/lib/codemirror.css">
 	<link rel="stylesheet" href="css/rubyblue_edited.css">
-	<link href="https://fonts.googleapis.com/css2?family=Carter+One&family=Roboto:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Carter+One|Roboto&display=swap" rel="stylesheet">
+	<meta charset="UTF-8">
 
-	<!-- Scripts -->
 	<script src="codemirror-5.52.2/lib/codemirror.js"></script>
-	<!-- Firebase -->
-	<script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
-	<!-- Firepad -->
-	<link rel="stylesheet" href="css/firepad/firepad-userlist.css" />
-	<script src="js/firepad/firepad-userlist.js"></script>
-	<script src="js/firepad/firepad.min.js"></script>
-	<script src="js/sweetalert2@9.js"></script>
-	<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="rgykifvu9z58v4s"></script>
+	  <!-- Firebase -->
+	  <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
+	  <!-- Firepad -->
+	  <link rel="stylesheet" href="css/firepad/firepad-userlist.css" />
+	  <script src="js/firepad/firepad-userlist.js"></script>
+	  <script src="js/firepad/firepad.min.js"></script>
+	  <script src="js/sweetalert2@9.js"></script>
+	  <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="rgykifvu9z58v4s"></script>
+
 </head>
 
+
+
 <body onload="init()">
-<header>
-	<h1 class="name">ΓΛΩΣΣΑ IDE</h1>
-	<div class="margin"></div>
-	<div class="btn unselectable" id="btn_runstop" onclick="btn_runstop()" title="Εκτέλεση/Διακοπή προγράμματος">
-		<span>Run</span>
-	</div>
-	<div class="btn unselectable" onclick="saveFileName()" title="Αποθήκευση αρχείου">
-		<span>Save</span>
-	</div>
-	<!-- Uncomment when load functionality is ready -->
-	<!-- <div class="btn unselectable" onclick="loadFile()" title="Φόρτωση αρχείου">
-        <span>Load</span>
-    </div> -->
-</header>
 
-<main class="main-layout">
-	<!-- User List Section -->
-	<div class="userlist-container">
-		<div class="userlist-header">
-			Συνδεδεμένοι Χρήστες
-		</div>
-		<div id="userlist" role="complementary" aria-label="Συνδεδεμένοι χρήστες"></div>
-	</div>
+    <header>
+        <h1 class="name">ΓΛΩΣΣΑ IDE</h1>
+        <div class="margin"></div>
+        <div class="btn unselectable" id="btn_runstop" onclick="btn_runstop()" title="Εκτέλεση/Διακοπή προγράμματος">
+            <span>Run</span>
+        </div>
+        <div class="btn unselectable" onclick="saveFileName()" title="Αποθήκευση αρχείου">
+            <span>Save</span>
+        </div>
+        <!-- Uncomment when load functionality is ready -->
+        <!-- <div class="btn unselectable" onclick="loadFile()" title="Φόρτωση αρχείου">
+            <span>Load</span>
+        </div> -->
+    </header>
 
-	<!-- Code Editor Section -->
-	<div class="code-editor-container">
-		<div class="code-editor-header">
-			Επεξεργαστής Κώδικα
-		</div>
-		<textarea id="code_area" aria-label="Περιοχή κώδικα"></textarea>
-	</div>
+    <main>
+        <div id="userlist" role="complementary" aria-label="Συνδεδεμένοι χρήστες"></div>
+        <textarea id="code_area" aria-label="Περιοχή κώδικα"></textarea>
 
-	<!-- Console/Output Section -->
-	<div class="screen_container" role="main" aria-label="Κονσόλα εκτέλεσης">
-		<div class="console-header">
-			Κονσόλα Εκτέλεσης
-		</div>
-		<div id="screen" aria-live="polite" aria-label="Αποτελέσματα εκτέλεσης"></div>
-		<input
-				type="text"
-				id="keyboard"
-				onkeydown="keyboard_down(event)"
-				placeholder="Πληκτρολογήστε εντολή..."
-				aria-label="Είσοδος εντολών"
-				autocomplete="off"
-				spellcheck="false"
-		>
-	</div>
-</main>
+        <div class="screen_container" role="main" aria-label="Κονσόλα εκτέλεσης">
+            <div id="screen" aria-live="polite" aria-label="Αποτελέσματα εκτέλεσης"></div>
+            <input
+                    type="text"
+                    id="keyboard"
+                    onkeydown="keyboard_down(event)"
+                    placeholder="Πληκτρολογήστε εντολή..."
+                    aria-label="Είσοδος εντολών"
+                    autocomplete="off"
+                    spellcheck="false"
+            >
+        </div>
+    </main>
 
-<!-- Save Modal -->
-<div class="popup" id="save_popup" role="dialog" aria-modal="true" aria-labelledby="save_title">
-	<div class="popup_window">
-		<div class="popup_header">
-			<h1 id="save_title" class="unselectable">Αποθήκευση</h1>
-		</div>
 
-		<div class="popup_content">
+	<!-- Save Popup -->
+
+	<div class="popup" id="save_popup">
+		<div class="popup_window">
+			<div class="popup_header">
+			<h1 class="unselectable">Αποθήκευση</h1>
+			</div>
+
 			<h4 class="unselectable">Όνομα αρχείου:</h4>
-			<input
-					type="text"
-					id="save_filename"
-					value="πρόγραμμα"
-					aria-label="Όνομα αρχείου προς αποθήκευση"
-					autocomplete="off"
-			>
+			<input type=text id="save_filename" value="πρόγραμμα"></input>
 
-			<div class="popup_actions">
-				<a class="popup_btn unselectable" href="#" aria-label="Ακύρωση">Ακύρωση</a>
-				<div class="popup_btn unselectable" onclick="save()" aria-label="Αποθήκευση αρχείου">Αποθήκευση</div>
-			</div>
+			<a class="popup_btn unselectable" href="#">Cancel</a>
+			<div class="popup_btn unselectable" onclick="save()">Save</div>
 		</div>
 	</div>
-</div>
 
-<!-- Load Modal -->
-<div class="popup" id="load_popup" role="dialog" aria-modal="true" aria-labelledby="load_title">
-	<div class="popup_window">
-		<div class="popup_header">
-			<h1 id="load_title" class="unselectable">Φόρτωση</h1>
-		</div>
-
-		<div class="popup_content">
-			<input
-					type="file"
-					accept=".txt"
-					id="load_file"
-					aria-label="Επιλέξτε αρχείο προς φόρτωση"
-			>
-
-			<div class="popup_actions">
-				<a class="popup_btn unselectable" href="#" aria-label="Ακύρωση">Ακύρωση</a>
-				<div class="popup_btn unselectable" onclick="load()" aria-label="Φόρτωση αρχείου">Φόρτωση</div>
+	<!-- Load Popup -->
+	<div class="popup" id="load_popup">
+		<div class="popup_window">
+			<div class="popup_header">
+			<h1 class="unselectable">Φόρτωση</h1>
 			</div>
+
+			<input type=file accept=".txt" id="load_file"></input>
+
+			<a class="popup_btn unselectable" href="#">Cancel</a>
+			<div class="popup_btn unselectable" onclick="load()">Load</div>
 		</div>
 	</div>
-	</main>
 
-	<!-- Scripts -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
-
-	<!-- CodeMirror -->
-	<script src="codemirror-5.52.2/addon/mode/simple.js"></script>
-	<script src="js/glwssa_mode.js" charset="utf-8"></script>
-
-	<!-- Application Scripts -->
-	<script src="./js/file_explorer.js" charset="utf-8"></script>
-	<script src="./js/initializer.js" charset="utf-8"></script>
-	<script src="./js/controller.js" charset="utf-8"></script>
-	<script src="./js/screen.js" charset="utf-8"></script>
-	<script src="./js/resize.js" charset="utf-8"></script>
-
-	<script>
-		function init() {
-			// Initialize Firebase
-			var config = {
-				apiKey: "AIzaSyAAMAVAy6d-hAsbiK74rdhDdj2R-FgO524",
-				authDomain: "firepad-959d7.firebaseapp.com",
-				databaseURL: "https://firepad-959d7.firebaseio.com",
-				projectId: "firepad-959d7",
-				storageBucket: "firepad-959d7.appspot.com",
-				messagingSenderId: "827774846517",
-				appId: "1:827774846517:web:cc1d7e2d267c3af613d37c"
-			};
-			firebase.initializeApp(config);
-
-			// Get Firebase Database reference
-			var firepadRef = getExampleRef();
-
-			// Create a random ID for the user
-			var userId = Math.floor(Math.random() * 9999999999).toString();
-
-			// Create FirepadUserList
-			var firepadUserList = FirepadUserList.fromDiv(firepadRef.child('users'),
-					document.getElementById('userlist'), userId);
-
-			// Create Firepad
-			var firepad = Firepad.fromCodeMirror(firepadRef, editor, {
-				defaultText: 'ΠΡΟΓΡΑΜΜΑ ....\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Ι\nΑΡΧΗ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ\n\n',
-				userId: userId
-			});
-
-			// Add loading state management
-			window.addEventListener('beforeunload', function() {
-				document.body.classList.add('loading');
-			});
-		}
-
-		// Helper to get hash from URL or generate a random one
-		function getExampleRef() {
-			var ref = firebase.database().ref();
-			var hash = window.location.hash.replace(/#/g, '');
-			if (hash) {
-				ref = ref.child(hash);
-			} else {
-				ref = ref.push(); // generate unique location
-				window.location = window.location + '#' + ref.key; // add it as a hash to the URL
-			}
-			if (typeof console !== 'undefined') {
-				console.log('Firebase data: ', ref.toString());
-			}
-			return ref;
-		}
-
-		async function saveFileName() {
-			const { value: filename } = await Swal.fire({
-				title: 'Όνομα Αρχείου',
-				input: 'text',
-				inputValue: 'ΠΡΟΓΡΑΜΜΑ',
-				showCancelButton: true,
-				cancelButtonText: 'Ακύρωση',
-				confirmButtonText: 'Επιβεβαίωση',
-				customClass: {
-					popup: 'swal-popup-modern',
-					title: 'swal-title-modern',
-					input: 'swal-input-modern',
-					confirmButton: 'swal-confirm-modern',
-					cancelButton: 'swal-cancel-modern'
-				},
-				inputValidator: (value) => {
-					if (!value) {
-						return 'Παρακαλώ εισάγετε όνομα αρχείου!';
-					}
-				}
-			});
-
-			if (filename) {
-				document.getElementById("save_filename").value = filename;
-				save();
-			}
-		}
-
-		// Enhanced keyboard navigation for accessibility
-		document.addEventListener('keydown', function(e) {
-			// Escape key closes popups
-			if (e.key === 'Escape') {
-				window.location.hash = '';
-			}
-
-			// Ctrl+S for save
-			if (e.ctrlKey && e.key === 's') {
-				e.preventDefault();
-				saveFileName();
-			}
-		});
-	</script>
-
-	<!-- Custom SweetAlert2 Styling -->
-	<style>
-		.swal-popup-modern {
-			background: var(--col-back) !important;
-			border: 1px solid rgba(0, 212, 255, 0.3) !important;
-			border-radius: 12px !important;
-			box-shadow: var(--shadow-large) !important;
-		}
-
-		.swal-title-modern {
-			color: var(--col-light) !important;
-			font-family: 'Roboto', sans-serif !important;
-		}
-
-		.swal-input-modern {
-			background: var(--col-fill) !important;
-			border: 1px solid rgba(0, 212, 255, 0.3) !important;
-			border-radius: 8px !important;
-			color: var(--col-light) !important;
-			font-family: 'Roboto', sans-serif !important;
-		}
-
-		.swal-input-modern:focus {
-			border-color: var(--col-accent) !important;
-			box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1) !important;
-		}
-
-		.swal-confirm-modern {
-			background: var(--col-accent) !important;
-			border-radius: 8px !important;
-			font-weight: 600 !important;
-		}
-
-		.swal-cancel-modern {
-			background: transparent !important;
-			border: 1px solid rgba(225, 232, 239, 0.3) !important;
-			color: var(--col-light) !important;
-			border-radius: 8px !important;
-			font-weight: 600 !important;
-		}
-	</style>
 </body>
+
+<!-- Filesaver -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+
+<!-- Codemirror Stuff -->
+<script src="codemirror-5.52.2/addon/mode/simple.js"></script>
+<script src="js/glwssa_mode.js" charset="utf-8"></script>
+
+
+<!-- Functional stuff -->
+<script src="./js/file_explorer.js" charset="utf-8"></script>
+<script src="./js/initializer.js" charset="utf-8"></script>
+<!-- <script src="./js/autosave.js" charset="utf-8"></script> -->
+<script src="./js/controller.js" charset="utf-8"></script>
+<script src="./js/screen.js" charset="utf-8"></script>
+<script src="./js/resize.js" charset="utf-8"></script>
+<script>
+    function init() {
+      //// Initialize Firebase.
+      //// TODO: replace with your Firebase project configuration.
+      var config = {
+		  apiKey: "AIzaSyAAMAVAy6d-hAsbiK74rdhDdj2R-FgO524",
+		  authDomain: "firepad-959d7.firebaseapp.com",
+		  databaseURL: "https://firepad-959d7.firebaseio.com",
+		  projectId: "firepad-959d7",
+		  storageBucket: "firepad-959d7.appspot.com",
+		  messagingSenderId: "827774846517",
+		  appId: "1:827774846517:web:cc1d7e2d267c3af613d37c"
+		};
+      firebase.initializeApp(config);
+
+      //// Get Firebase Database reference.
+      var firepadRef = getExampleRef();
+
+	  // Create a random ID to use as our user ID (we must give this to firepad and FirepadUserList).
+      var userId = Math.floor(Math.random() * 9999999999).toString();
+
+      //// Create FirepadUserList (with our desired userId).
+      var firepadUserList = FirepadUserList.fromDiv(firepadRef.child('users'),
+          document.getElementById('userlist'), userId);
+
+	  //// Create Firepad.
+      var firepad = Firepad.fromCodeMirror(firepadRef, editor, {
+        defaultText: 'ΠΡΟΓΡΑΜΜΑ ....\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Ι\nΑΡΧΗ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ\n\n', userId: userId
+      });
+    }
+
+    // Helper to get hash from end of URL or generate a random one.
+    function getExampleRef() {
+      var ref = firebase.database().ref();
+      var hash = window.location.hash.replace(/#/g, '');
+      if (hash) {
+        ref = ref.child(hash);
+      } else {
+        ref = ref.push(); // generate unique location.
+        window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
+      }
+      if (typeof console !== 'undefined') {
+        console.log('Firebase data: ', ref.toString());
+      }
+      return ref;
+    }
+
+	async function saveFileName() {
+		const { value: filename } = await Swal.fire({
+		  title: 'Όνομα Αρχείου',
+		  input: 'text',
+		  inputValue: 'ΠΡΟΓΡΑΜΜΑ',
+		  showCancelButton: true,
+		  inputValidator: (value) => {
+			if (!value) {
+			  return 'You need to write something!'
+			}
+		}
+		})
+		if (filename) {
+			document.getElementById("save_filename").value = filename;
+			save();
+		}
+	}
+  </script>
+
 </html>
